@@ -9,7 +9,7 @@ If you want to learn more detail about the project,you can get more info from th
 
 使用方法
 * 打开两个终端，分别运行blockchain.py程序，一个端口设置为6000，另一个设置为6001。（这里直接使用vscode 终端）
-<img src='/img/start-service.png'>
+    <img src='/img/start-service.png'>
 * 使用vscode插件postcode进行接口测试，这里测试了/mine,/chain,/nodes/register,/nodes/resolve,/transactions/new等接口，接口信息见图
 <img src='/img/postcode.png'>
 1.挖矿
