@@ -5,18 +5,19 @@ import hashlib
 from flask import Flask,jsonify,request
 from uuid import uuid4
 
+import requests
 from urllib.parse import urlparse
 
-# 构建一个区块链
+# 区块链类
 class Blockchain(object):
 
     def __init__(self):
         self.chain=[]
         self.current_transactions=[]
-        # 除了要初始化链和交易之外，还要创建初始区块
+        # 首先要有一个创世区块
         self.new_block(previous_hash='1',proof=100)
         # 区块链是去中心化的，因此区块链类需要一个节点集合
-        self.nodes=set() # 使用集合是希望集合中只出现一次
+        self.nodes=set() # 使用集合是希望集合中结点只出现一次
 
     def register_node(self,address):
         '''
@@ -60,7 +61,7 @@ class Blockchain(object):
             创建一个新的交易,
             sender <str> 发送者地址,
             recipient <str> 接受者地址,
-            amount <int> 数量,
+            amount <int> 交易金额,
             返回值是本次交易的下标
         '''
         self.current_transactions.append({
@@ -160,7 +161,7 @@ class Blockchain(object):
 
         # 验证网络中所有结点的区块链
         for node in neighbours:
-            response=request.get(f'http://{node}/chain')
+            response=requests.get(f'http://{node}/chain')
 
             if response.status_code==200:
                 length=response.json()['length']
@@ -178,7 +179,7 @@ class Blockchain(object):
         return False
 
 
-# 将区块链改装为API形式
+# API调用
 app=Flask(__name__)
 nodeidentifier=str(uuid4()).replace('-','')
 
@@ -226,7 +227,7 @@ def new_transactions():
         return 'Missing values',400
     
     # 创建新的交易
-    index=blockchain.new_transaction[values["sender"],values["recipient"],values["amount"]]
+    index=blockchain.new_transaction(values["sender"],values["recipient"],values["amount"])
     response={'message':f'Transaction will be added to Block {index}'}
     return jsonify(response),201
 
@@ -264,6 +265,9 @@ def register_node():
 
 @app.route('/nodes/resolve',methods=['GET'])
 def consensus():
+    '''
+        运行共识机制的请求
+    '''
     repalced=blockchain.resolve_conflicts()
     if repalced:
         response = {
