@@ -9,6 +9,9 @@ from Transacation import Transaction
 
 class Chain(object):
     def __init__(self):
+        '''
+            初始化链
+        '''
         self.chain=[]
         self.current_transactions=[]
         # 首先要有一个创世区块

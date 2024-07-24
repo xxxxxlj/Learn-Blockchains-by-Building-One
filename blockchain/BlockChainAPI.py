@@ -5,6 +5,9 @@ from Chain import Chain
 
 class BlockChainAPI:
     def __init__(self) -> None:
+        '''
+            初始化Flask后端
+        '''
         self.app=Flask(__name__)
         self.nodeidentifier=str(uuid4()).replace('-','')
         self.blockchain=Chain()
@@ -21,6 +24,9 @@ class BlockChainAPI:
         self.app.add_url_rule('/nodes/resolve', 'consensus', self.consensus, methods=['GET'])
 
     def mine(self):
+        '''
+            挖掘后端
+        '''
         last_block=self.blockchain.last_block
         proof=self.blockchain.proof_of_work(last_block)
     
@@ -44,6 +50,9 @@ class BlockChainAPI:
         return jsonify(response),200
 
     def new_transaction(self):
+        '''
+            创建新交易后端
+        '''
         values=request.get_json()
 
         # 检查创建新交易的元素是否都在上传的API中
@@ -57,6 +66,9 @@ class BlockChainAPI:
         return jsonify(response),201
 
     def full_chain(self):
+        '''
+            查看全链后端
+        '''
         response={
             'chain':self.blockchain.chain,
             'length':len(self.blockchain.chain)
@@ -64,6 +76,9 @@ class BlockChainAPI:
         return jsonify(response),200
     
     def register_node(self):
+        '''
+            注册结点
+        '''
         values=request.get_json()
 
         nodes=values.get('nodes')
@@ -80,6 +95,9 @@ class BlockChainAPI:
         return jsonify(response),201
     
     def consensus(self):
+        '''
+            共识后端
+        '''
         repalced=self.blockchain.resolve_conflicts()
         if repalced:
             response = {
@@ -95,4 +113,7 @@ class BlockChainAPI:
         return jsonify(response), 200
     
     def run(self, host='0.0.0.0', port=6000):
+        '''
+            后端运行函数
+        '''
         self.app.run(host=host, port=port)
