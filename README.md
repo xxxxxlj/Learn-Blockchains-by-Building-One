@@ -18,10 +18,10 @@ This repo is trying to build a simple blockchain by Python.
     <img src='/img/resolve.png'>
 
 ## Todolist
-- [x] 简单区块链实现
+- [x] 简单区块链实现（工作量机制）
 - [x] 按照面向对象，以类的形式重构区块链
-- [ ] 增加其他共识方法，包括权益证明，并设置可选择参数
-- [ ] 进一步优化整体设计
+- [ ] 实现简单的权益证明区块链
+- [ ] 进一步优化权益证明，考虑权益持有时间和权益值
 
 ## Reference
 1.本项目参考了开源项目 https://github.com/dvf/blockchain  
