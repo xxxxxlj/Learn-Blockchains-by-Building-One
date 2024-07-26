@@ -1,5 +1,5 @@
 class Transaction:
-    def __init__(self,sender,recipient,amount) -> None:
+    def __init__(self,sender:str,recipient:str,amount:float) -> None:
         '''
             交易初始化
         '''
@@ -7,11 +7,5 @@ class Transaction:
         self.recipient=recipient
         self.amount=amount
         
-   
-    @property
-    def to_dict(self):
-        return {
-            "sender":self.sender,
-            "recipient":self.recipient,
-            "amount":self.amount,
-        }
+    def __repr__(self) -> str:
+        return f'Transactoion(from:{self.sender}, to:{self.recipient}, amount:{self.amount})'

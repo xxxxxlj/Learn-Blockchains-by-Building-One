@@ -1,26 +1,27 @@
-from Node import Node
+from typing import List
+from Transacation import Transaction
+import hashlib
+
 class Block:
-    def __init__(self,index,timestamp,transactions,proof,previous_hash,validator:Node) -> None:
+    '''
+        区块类，完成区块的创建
+    '''
+    def __init__(self,timestamp:str,transactions:List[Transaction],previous_hash:str) -> None:
         '''
             初始化区块
         '''
-        self.index=index
         self.timestamp=timestamp
         self.transactions=transactions
-        self.proof=proof
         self.previous_hash=previous_hash
-        self.validator=validator
+        self.block_hash=self.hash()
 
-    @property
-    def to_dict(self):
+    def hash(self):
         '''
-            将数据以字典形式返回
+            计算区块哈希
         '''
-        return {
-            "index":self.index,
-            "timestamp":self.timestamp,
-            "validator":self.validator,
-            "transactions":[tx for tx in self.transactions],    # Transaction是一个数组，可见blockExample.json示例
-            "proof":self.proof,
-            "previous_hash":self.previous_hash 
-        }
+        transaction_str = ''.join([str(tx) for tx in self.transactions])
+        block_data = f"{self.previous_hash}{transaction_str}{self.timestamp}"
+        return hashlib.sha256(block_data.encode()).hexdigest()
+    
+    def __repr__(self) -> str:
+        return f'Block(previous_hash:{self.previous_hash},transactions:{self.transactions},timestamp:{self.timestamp},hash:{self.block_hash})'
